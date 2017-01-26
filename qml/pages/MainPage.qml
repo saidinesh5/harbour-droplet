@@ -58,7 +58,7 @@ Page {
             SilicaListView {
                 id: listView
                 model: BookmarksModel.dataModel()
-                height: mainPage.height
+                height: mainPage.height - 2*Theme.paddingLarge
                 width: parent.width
                 header: SectionHeader {
                     text: qsTr("Bookmarks")

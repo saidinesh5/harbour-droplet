@@ -68,6 +68,10 @@ ApplicationWindow
         function dropletCountChanged(count){
             root.dropletCount = count
         }
+
+        function bookmarksUpdated(){
+            BookmarksModel.reload()
+        }
     }
 
     cover: Qt.resolvedUrl("cover/CoverPage.qml")

@@ -87,6 +87,7 @@ Item {
 
                 onCollapseRequested: tabStack.expanded = false
                 onCloseRequested: tabModel.remove(index)
+                onBookmarkedChanged: g_dbusService.emitSignal("bookmarksUpdated", [])
             }
         }
 
@@ -132,6 +133,7 @@ Item {
                   <method name="attachClient"/>
                   <method name="detachClient"/>
                   <signal name="dropletCountChanged"><arg type="i" name="count" direction="out"/></signal>
+                  <signal name="bookmarksUpdated"/>
               </interface>'
 
         function openUrl(url){

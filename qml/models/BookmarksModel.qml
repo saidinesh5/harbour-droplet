@@ -36,11 +36,11 @@ ListModel {
             if(table.rows.length === 0)
             {
                 console.log("Initializing Bookmarks Table with fresh data")
-                tx.executeSql('INSERT INTO bookmarks VALUES (?,?);', ["Duck Duck Go", "http://duckduckgo.com/"])
-                tx.executeSql('INSERT INTO bookmarks VALUES (?,?);', ["Google News", "http://news.google.com"])
-                tx.executeSql('INSERT INTO bookmarks VALUES (?,?);', ["Jolla Together", "http://together.jolla.com/"])
-                tx.executeSql('INSERT INTO bookmarks VALUES (?,?);', ["Maemo forum", "http://talk.maemo.org/"])
-                tx.executeSql('INSERT INTO bookmarks VALUES (?,?);', ["Jolla Tides", "http://jollatides.com/"])
+                tx.executeSql('INSERT INTO bookmarks VALUES (?,?);', ["Duck Duck Go", "https://duckduckgo.com/"])
+                tx.executeSql('INSERT INTO bookmarks VALUES (?,?);', ["Google News", "https://news.google.com/"])
+                tx.executeSql('INSERT INTO bookmarks VALUES (?,?);', ["Jolla Together", "https://together.jolla.com/"])
+                tx.executeSql('INSERT INTO bookmarks VALUES (?,?);', ["Maemo forum", "https://talk.maemo.org/"])
+                tx.executeSql('INSERT INTO bookmarks VALUES (?,?);', ["Jolla Tides", "http://www.jollatides.com/"])
             }
         })
     }

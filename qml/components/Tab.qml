@@ -32,7 +32,7 @@ Rectangle {
 
     property url url
     property bool mobileMode: SettingsModel.isDefaultDeviceMobile
-    property bool favourite
+    property bool bookmarked: _bookmarked || BookmarksModel.contains(url)
 
     readonly property string title: _content !== null? _content.title : ''
     readonly property string icon: _content !== null? _content.icon : ''
@@ -51,14 +51,11 @@ Rectangle {
     function reload(){ _content.reload() }
 
     property Item _content: contentLoader.item
-
-    property int _tabDataChanged
+    property bool _bookmarked
 
     onUrlChanged: {
-        favourite = Qt.binding(function(){
-            _tabDataChanged--;
-            return BookmarksModel.contains(url)
-        })
+        //To make sure the binding gets reevaluated on local change
+        _bookmarked = false
     }
 
     signal closeRequested()
@@ -138,6 +135,8 @@ Rectangle {
             experimental.preferences.cookiesEnabled: true
             experimental.enableInputFieldAnimation: false
             experimental.enableResizeContent: !vkbObserver.animating
+            experimental.preferences.developerExtrasEnabled: true
+
             //We are not interested in taking care of the downloads.
             //Let the default browser nicely download it to transfers
             experimental.onDownloadRequested: {
@@ -210,15 +209,18 @@ Rectangle {
             TabHeaderButton {
                 width: parent.width/5
                 height: parent.height
-                iconText: tab.favourite? FontAwesome.icon.bookmark : FontAwesome.icon.bookmark_o
+                iconText: tab.bookmarked? FontAwesome.icon.bookmark : FontAwesome.icon.bookmark_o
                 onClicked: {
                     //Show toast
-                    if(tab.favourite) BookmarksModel.remove(url)
-                    else BookmarksModel.add(title, url)
-
-                    //To cause the re evaluation of bindings in this tab
-                    _tabDataChanged++
-                    Toast.post(qsTr("Link added to Bookmarks"))
+                    if(tab.bookmarked){
+                        BookmarksModel.remove(url)
+                        tab._bookmarked = false
+                    }
+                    else {
+                        BookmarksModel.add(title, url)
+                        tab._bookmarked = true
+                        Toast.post(qsTr("Bookmarked"))
+                    }
                 }
             }
 
