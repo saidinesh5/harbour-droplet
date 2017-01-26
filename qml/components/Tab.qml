@@ -61,7 +61,7 @@ Rectangle {
         })
     }
 
-    signal closeRequested(int index)
+    signal closeRequested()
     signal collapseRequested()
 
 //    Component {
@@ -240,7 +240,7 @@ Rectangle {
                 iconText: FontAwesome.icon.share_square_o
                 onClicked: {
                     g_dropletHelper.openInExternal(url)
-                    tab.closeRequested(index)
+                    tab.closeRequested()
                 }
             }
 
