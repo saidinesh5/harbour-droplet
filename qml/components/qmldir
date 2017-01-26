@@ -1,0 +1,8 @@
+// qmldir
+singleton Toast Toast.qml
+Bubble Bubble.qml
+BubbleStack BubbleStack.qml
+TabHeaderButton TabHeaderButton.qml
+Tab Tab.qml
+TrashCan TrashCan.qml
+

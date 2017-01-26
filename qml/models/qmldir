@@ -1,0 +1,3 @@
+// qmldir
+singleton SettingsModel SettingsModel.qml
+singleton BookmarksModel BookmarksModel.qml

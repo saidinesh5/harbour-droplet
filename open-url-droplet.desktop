@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Open with Droplet Browser
+NotShowIn=X-MeeGo;
+MimeType=text/html;x-maemo-urischeme/http;x-maemo-urischeme/https;
+X-Maemo-Service=net.garageresearch.droplet
+X-Maemo-Object-Path=/browser
+X-Maemo-Method=net.garageresearch.droplet.openUrl
