@@ -137,6 +137,9 @@ Rectangle {
             experimental.preferences.cookiesEnabled: true
             experimental.enableInputFieldAnimation: false
             experimental.enableResizeContent: !vkbObserver.animating
+            //We are not interested in taking care of the downloads.
+            //Let the default browser nicely download it to transfers
+            experimental.onDownloadRequested: g_dropletHelper.openInExternal(downloadItem.url.toString())
 
             // Helps rendering websites that are only optimized for desktop
             experimental.preferredMinimumContentsWidth: 980
