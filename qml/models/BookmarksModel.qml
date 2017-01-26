@@ -47,7 +47,7 @@ ListModel {
 
     function reload(){
         bookmarksModel.clear()
-        db.transaction(function(tx){
+        db.readTransaction(function(tx){
             var rs = tx.executeSql('SELECT * FROM bookmarks ORDER BY bookmarks.title;');
             for(var i = 0; i < rs.rows.length; i++)
             {
@@ -78,7 +78,7 @@ ListModel {
     function contains(url){
         var result = false
 
-        db.transaction(function(tx){
+        db.readTransaction(function(tx){
             var rs = tx.executeSql('SELECT * FROM bookmarks  WHERE url=(?);', [url])
             result = rs.rows.length > 0
         })
