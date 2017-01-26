@@ -85,6 +85,7 @@ Item {
                 visible: tabStack.currentIndex === index && tabStack.expanded
                 active: tabStack.isExpandable(index)
 
+                onCollapseRequested: tabStack.expanded = false
                 onCloseRequested: tabModel.remove(index)
             }
         }

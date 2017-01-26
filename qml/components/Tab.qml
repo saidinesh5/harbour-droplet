@@ -62,6 +62,7 @@ Rectangle {
     }
 
     signal closeRequested(int index)
+    signal collapseRequested()
 
 //    Component {
 //        id: contentComponent
@@ -139,7 +140,10 @@ Rectangle {
             experimental.enableResizeContent: !vkbObserver.animating
             //We are not interested in taking care of the downloads.
             //Let the default browser nicely download it to transfers
-            experimental.onDownloadRequested: g_dropletHelper.openInExternal(downloadItem.url.toString())
+            experimental.onDownloadRequested: {
+                g_dropletHelper.openInExternal(downloadItem.url.toString())
+                tab.collapseRequested()
+            }
 
             // Helps rendering websites that are only optimized for desktop
             experimental.preferredMinimumContentsWidth: 980
