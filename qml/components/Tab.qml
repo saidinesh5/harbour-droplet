@@ -136,6 +136,7 @@ Rectangle {
             experimental.enableInputFieldAnimation: false
             experimental.enableResizeContent: !vkbObserver.animating
             experimental.preferences.developerExtrasEnabled: true
+            experimental.preferences.navigatorQtObjectEnabled: true
 
             //We are not interested in taking care of the downloads.
             //Let the default browser nicely download it to transfers
@@ -154,7 +155,6 @@ Rectangle {
 
             experimental.onMessageReceived: {
                 var data = null
-                console.log("Message received: ", message.data)
                 try {
                     data = JSON.parse(message.data)
                 } catch (error) {
