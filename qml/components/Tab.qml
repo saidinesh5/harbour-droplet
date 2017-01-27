@@ -148,8 +148,28 @@ Rectangle {
             experimental.preferredMinimumContentsWidth: 980
 
             experimental.userScripts: [
-                Qt.resolvedUrl("../js/devicePixelRatioHack.js")
+                Qt.resolvedUrl("../js/devicePixelRatioHack.js"),
+                Qt.resolvedUrl("../js/userscript.js")
             ]
+
+            experimental.onMessageReceived: {
+                var data = null
+                console.log("Message received: ", message.data)
+                try {
+                    data = JSON.parse(message.data)
+                } catch (error) {
+                    console.log('onMessageReceived: ' + message.data )
+                    return
+                }
+
+
+                switch (data.type) {
+                case 'link':
+                    if(data.target === '_blank') root.push(data.href)
+                    else if(data.target && data.target !== '_parent') root.push(data.href)
+                    break
+                }
+            }
 
             Component.onCompleted: console.log("Loading: ", url)
 

@@ -54,14 +54,14 @@ Item {
         }
     }
 
+    function push(url) {
+        tabModel.append({ source: url })
+    }
+
     ListModel {
         id: tabModel
         //ListElement { source: 'http://www.google.com' }
         onCountChanged: g_dbusService.emitSignal("dropletCountChanged", count)
-
-        function push(url) {
-            tabModel.append({ source: url })
-        }
     }
 
     Item {
@@ -137,7 +137,7 @@ Item {
               </interface>'
 
         function openUrl(url){
-            tabModel.push(url.toString())
+            root.push(url.toString())
         }
 
         function quit(){

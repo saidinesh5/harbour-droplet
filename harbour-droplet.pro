@@ -32,7 +32,8 @@ OTHER_FILES += \
     harbour-droplet.desktop \
     open-url-droplet.desktop \
     net.garageresearch.droplet.service \
-    js/devicePixelRatioHack.js
+    qml/js/devicePixelRatioHack.js \
+    qml/js/userscript.js
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 256x256
 
