@@ -43,10 +43,19 @@
 
 int main(int argc, char *argv[])
 {
+    //Some more speed & memory improvements
+    setenv("QT_NO_FAST_MOVE", "0", 0);
+    setenv("QT_NO_FT_CACHE","0",0);
+    setenv("QT_NO_FAST_SCROLL","0",0);
+    setenv("QT_NO_ANTIALIASING","1",1);
+    setenv("QT_NO_FREE","1",1);
+
+    // Taken from sailfish-browser
+    setenv("USE_ASYNC", "1", 1);
+
     QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
 
     //Code for command line arguments come here
-
 
     qmlRegisterType<AppletView>("net.garageresearch.droplet", 0, 1, "AppletView");
     qmlRegisterType<DropletHelper>("net.garageresearch.droplet", 0, 1, "DropletHelper");
