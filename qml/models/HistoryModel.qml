@@ -59,7 +59,8 @@ ListModel {
         return result
     }
 
-    function dataModel(startPoint){
+    function reload(startPoint){
+        //TODO: Make good use of startPoint to fetch more of history instead of the last 100
         historyModel.clear()
         db.readTransaction(function(tx){
             var rs = tx.executeSql('SELECT * FROM history ORDER BY timestamp DESC limit (?)', [maxCount])
@@ -70,7 +71,10 @@ ListModel {
             }
             //ListElement { timestamp: 'yesterday', url: 'https://duckduckgo.com', title: 'Duck duck go' }
         })
+    }
 
+    function dataModel(startPoint){
+        historyModel.reload()
         return historyModel
     }
 

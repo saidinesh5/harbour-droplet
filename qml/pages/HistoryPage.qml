@@ -35,6 +35,11 @@ Page {
                 text: qsTr("Clear History")
                 onClicked: historyModel.wipe()
             }
+
+            MenuItem {
+                text: qsTr("Refresh")
+                onClicked: historyModel.reload()
+            }
         }
 
         contentWidth: column.width
