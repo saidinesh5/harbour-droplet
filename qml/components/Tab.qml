@@ -106,6 +106,7 @@ Rectangle {
             focus: tab.visible
 
             anchors.fill: parent
+            anchors.bottomMargin: vkbObserver.opened? vkbObserver.panelSize : 0
 
             VirtualKeyboardObserver {
                 id: vkbObserver
@@ -127,7 +128,7 @@ Rectangle {
             // Column handles height of web content and width read from web page
             // For still unknown reason pulley menu cannot be opened when contentHeight == height
             // Due to Bug #7857, cleanup + 1px when bug is fixed
-            contentHeight: Math.floor(Math.max(tab.height + 1, webView.experimental.page.height))
+            contentHeight: Math.floor(Math.max(webView.height + 1, webView.experimental.page.height))
             contentWidth: Math.floor(Math.max(tab.width, webView.experimental.page.width))
 
             experimental.deviceWidth: Screen.width
