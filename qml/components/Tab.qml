@@ -141,6 +141,7 @@ Rectangle {
             //We are not interested in taking care of the downloads.
             //Let the default browser nicely download it to transfers
             experimental.onDownloadRequested: {
+                Toast.post(qsTr("Starting download..."))
                 g_dropletHelper.openInExternal(downloadItem.url.toString())
                 tab.collapseRequested()
             }
@@ -251,7 +252,7 @@ Rectangle {
                 iconText: FontAwesome.icon.link
                 onClicked: {
                     Clipboard.text = tab.url
-                    Toast.post(qsTr("Link copied to clipboard"))
+                    Toast.post(qsTr("Link copied"))
                 }
             }
 
@@ -263,6 +264,7 @@ Rectangle {
                 onClicked: {
                     g_dropletHelper.openInExternal(url)
                     tab.closeRequested()
+                    Toast.post(qsTr("Launching in Sailfish Browser..."))
                 }
             }
 

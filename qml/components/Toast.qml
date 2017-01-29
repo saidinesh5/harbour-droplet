@@ -37,6 +37,5 @@ Item {
     Notification {
         id: notification
         urgency: Notification.Low
-
     }
 }

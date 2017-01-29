@@ -31,6 +31,7 @@
 
 import QtQuick 2.0
 import org.nemomobile.dbus 2.0
+import org.nemomobile.notifications 1.0
 import net.garageresearch.droplet 0.1
 
 import "components"
@@ -79,8 +80,7 @@ Item {
 
             delegate: Tab {
                 clip: true
-                width: tabContainer.width
-                height: tabContainer.height
+                anchors.fill: parent
                 url: source
                 visible: tabStack.currentIndex === index && tabStack.expanded
                 active: tabStack.isExpandable(index)
@@ -128,6 +128,7 @@ Item {
         iface: SettingsModel.dbusInterfaceName
         xml: '<interface name="net.garageresearch.droplet">
                   <method name="openUrl"> <arg type="s" name="url" direction="in"/> </method>
+                  <method name="openUrlExternally"> <arg type="s" name="url" direction="in"/> </method>
                   <method name="dropletCount"> <arg type="i" name="url" direction="out"/> </method>
                   <method name="quit"/>
                   <method name="attachClient"/>
@@ -138,6 +139,10 @@ Item {
 
         function openUrl(url){
             root.push(url.toString())
+        }
+
+        function openUrlExternally(url){
+            g_dropletHelper.openInExternal(url.toString())
         }
 
         function quit(){
@@ -175,11 +180,35 @@ Item {
         onIsDefaultBrowserChanged: SettingsModel.isDefaultBrowser = isDefaultBrowser
     }
 
-    //TODO show a warning when running in fallbackmode
+    Notification {
+        id: fallbackModeNotification
+        urgency: Notification.Low
+        category: 'x-nemo.software-update.conf'
+        appName: qsTr("Droplet Browser")
+        previewSummary: qsTr("Applets not supported!")
+        previewBody: qsTr("Droplet browser needs support for applets")
+        summary: qsTr("Applets not supported!")
+        body: qsTr("Kindly enable support for Applets for optimum experience.")
+
+        remoteActions: [ {
+                "name": "default",
+                "displayName": qsTr("Enable support for applets"),
+                "icon": "icon-lock-social",
+                "service": SettingsModel.dbusServiceName,
+                "path": SettingsModel.dbusPathName,
+                "iface": SettingsModel.dbusInterfaceName,
+                "method": "openUrlExternally",
+                "arguments": ["https://github.com/saidinesh5/sailfishos-lipstick-enable-applets"]
+            }]
+    }
 
     Component.onCompleted: {
         SettingsModel.isDefaultBrowser = g_dropletHelper.isDefaultBrowser
         g_dbusService.emitSignal("dropletCountChanged", tabModel.count)
+
+        if(thisWindow.fallbackMode){
+            fallbackModeNotification.publish()
+        }
     }
 }
 

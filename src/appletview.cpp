@@ -75,7 +75,7 @@ AppletView::Shape AppletView::activeAreaShape() const
 
 bool AppletView::fallbackMode() const
 {
-    return m_lipstickSupportsApplets;
+    return !m_lipstickSupportsApplets;
 }
 
 void AppletView::setActiveArea(const QRect &rect)
