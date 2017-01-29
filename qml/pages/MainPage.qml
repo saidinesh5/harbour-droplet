@@ -77,6 +77,8 @@ Page {
                 model: bookmarksModel.dataModel()
                 height: mainPage.height - pageHeader.height
                 width: parent.width
+                clip: true
+
                 delegate: BackgroundItem {
                     id: delegate
 

@@ -127,5 +127,8 @@ Page {
             SettingsModel.isDefaultBrowser = true
             pageStack.replaceAbove(null, "MainPage.qml")
         }
+
+        opacity: slideshow.currentIndex === slideshow.count - 1? 1 : 0
+        Behavior on opacity { NumberAnimation{ duration: 200 } }
     }
 }
