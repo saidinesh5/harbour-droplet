@@ -23,7 +23,7 @@ import Sailfish.Silica 1.0
 import "../models"
 
 Page {
-    id: mainPage
+    id: historyPage
 
     allowedOrientations: Orientation.Portrait
 
@@ -32,57 +32,43 @@ Page {
 
         PullDownMenu {
             MenuItem {
-                text: qsTr("About")
-                onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
-            }
-            MenuItem {
-                text: qsTr("Settings")
-                onClicked: pageStack.push(Qt.resolvedUrl("SettingsPage.qml"))
-            }
-            MenuItem {
-                text: qsTr("History")
-                onClicked: pageStack.push(Qt.resolvedUrl("HistoryPage.qml"))
-            }
-            MenuItem {
-                visible: root.dropletCount > 0
-                text: qsTr("Close all droplets")
-                onClicked: g_dbusInterface.call("quit")
+                text: qsTr("Clear History")
+                onClicked: historyModel.wipe()
             }
         }
 
         contentWidth: column.width
         contentHeight: column.height
 
-        BookmarksModel {
-            id: bookmarksModel
-        }
-
-        Connections {
-            target: root
-            onBookmarksUpdated: bookmarksModel.reload()
-        }
+        HistoryModel { id: historyModel }
 
         Column {
             id: column
 
-            width: mainPage.width
+            width: historyPage.width
 
             PageHeader {
                 id: pageHeader
-                title: qsTr("Bookmarks")
+                title: qsTr("History")
             }
 
             SilicaListView {
                 id: listView
-                model: bookmarksModel.dataModel()
-                height: mainPage.height - pageHeader.height
+                model: historyModel.dataModel()
+                height: historyPage.height - pageHeader.height
                 width: parent.width
+                clip: true
+
+                section.property: "timestamp"
+                section.criteria: ViewSection.FullString
+                section.delegate: SectionHeader{ text: section }
+
                 delegate: BackgroundItem {
                     id: delegate
 
                     Label {
                         x: Theme.horizontalPageMargin
-                        text: title
+                        text: title && title !== ""? title : url
                         anchors.verticalCenter: parent.verticalCenter
                         color: delegate.highlighted ? Theme.highlightColor : Theme.primaryColor
                     }
@@ -92,6 +78,5 @@ Page {
                 VerticalScrollDecorator {}
             }
         }
-
     }
 }

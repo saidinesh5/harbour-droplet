@@ -1,4 +1,2 @@
 // qmldir
-singleton BookmarksModel BookmarksModel.qml
 singleton SettingsModel SettingsModel.qml
-singleton TabModel TabModel.qml

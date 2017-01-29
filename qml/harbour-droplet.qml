@@ -42,6 +42,8 @@ ApplicationWindow
 
     property int dropletCount
 
+    signal bookmarksUpdated()
+
     function closeAllDroplets()
     {
         g_dbusInterface.call("quit", [])
@@ -70,7 +72,7 @@ ApplicationWindow
         }
 
         function bookmarksUpdated(){
-            BookmarksModel.reload()
+            root.bookmarksUpdated()
         }
     }
 

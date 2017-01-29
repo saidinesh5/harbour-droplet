@@ -32,7 +32,7 @@ Rectangle {
 
     property url url
     property bool mobileMode: SettingsModel.isDefaultDeviceMobile
-    property bool bookmarked: _bookmarked || BookmarksModel.contains(url)
+    property bool bookmarked: _bookmarked || g_bookmarksModel.contains(url)
 
     readonly property string title: _content !== null? _content.title : ''
     readonly property string icon: _content !== null? _content.icon : ''
@@ -60,6 +60,8 @@ Rectangle {
 
     signal closeRequested()
     signal collapseRequested()
+
+    onLoadingChanged: if(!loading) g_historyModel.add(url, title)
 
 //    Component {
 //        id: contentComponent
@@ -167,8 +169,8 @@ Rectangle {
 
                 switch (data.type) {
                 case 'link':
-                    if(data.target === '_blank') TabModel.push(data.href)
-                    else if(data.target && data.target !== '_parent') TabModel.push(data.href)
+                    if(data.target === '_blank') g_tabModel.push(data.href)
+                    else if(data.target && data.target !== '_parent') g_tabModel.push(data.href)
                     break
                 }
             }
@@ -235,11 +237,11 @@ Rectangle {
                 onClicked: {
                     //Show toast
                     if(tab.bookmarked){
-                        BookmarksModel.remove(url)
+                        g_bookmarksModel.remove(url)
                         tab._bookmarked = false
                     }
                     else {
-                        BookmarksModel.add(title, url)
+                        g_bookmarksModel.add(title, url)
                         tab._bookmarked = true
                         Toast.post(qsTr("Bookmarked"))
                     }

@@ -3,7 +3,6 @@ Type=Application
 X-Nemo-Application-Type=silica-qt5
 Icon=harbour-droplet
 Exec=sailfish-qml harbour-droplet
-#Exec=harbour-droplet
 Name=Droplet
 # translation example:
 # your app name in German locale (de)
