@@ -1,0 +1,6 @@
+* Mon Jan 30 2017 Dinesh Manajipet <saidinesh5@gmail.com> 0.1-1
+- Added a "Double tap a link to open bypass Droplet browser"
+- Added a fallback mode for applet view - to work on unpatched lipstick
+- Added Bookmarks and History
+- Handle the downloads via. Sailfish Browser
+- Initial commit Of what seems to be a barely working droplet-browser
