@@ -65,7 +65,8 @@ DISTFILES += \
     qml/models/HistoryModel.qml \
     qml/pages/MainPage.qml \
     qml/components/Toast.qml \
-    qml/models/BookmarksModel.qml
+    qml/models/BookmarksModel.qml \
+    qml/models/TabModel.qml
 
 urlhandler.files = open-url-droplet.desktop
 urlhandler.path = /usr/share/harbour-droplet/

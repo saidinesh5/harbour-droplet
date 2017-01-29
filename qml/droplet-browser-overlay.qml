@@ -47,22 +47,12 @@ Item {
     Timer {
         //3 seconds of no tabs / connected clients means the browser exits
         id: exitTimer
-        running: tabModel.count === 0 && connectedClients === 0
+        running: TabModel.count === 0 && connectedClients === 0
         interval: SettingsModel.overlayTimeout
         onTriggered: {
             console.log("There are no active droplets or connected clients. Bye Bye")
             thisWindow.quit()
         }
-    }
-
-    function push(url) {
-        tabModel.append({ source: url })
-    }
-
-    ListModel {
-        id: tabModel
-        //ListElement { source: 'http://www.google.com' }
-        onCountChanged: g_dbusService.emitSignal("dropletCountChanged", count)
     }
 
     Item {
@@ -76,7 +66,7 @@ Item {
             id: tabLoader
             width: tabContainer.width
             height: tabContainer.height
-            model: tabModel
+            model: TabModel.dataModel()
 
             delegate: Tab {
                 clip: true
@@ -86,7 +76,7 @@ Item {
                 active: tabStack.isExpandable(index)
 
                 onCollapseRequested: tabStack.expanded = false
-                onCloseRequested: tabModel.remove(index)
+                onCloseRequested: TabModel.remove(index)
                 onBookmarkedChanged: g_dbusService.emitSignal("bookmarksUpdated", [])
             }
         }
@@ -104,7 +94,7 @@ Item {
                                                                   Qt.rect(snapX,snapY, bubbleWidth, bubbleWidth)
         onContentAreaChanged: thisWindow.activeArea = contentArea
 
-        model: tabModel
+        model: TabModel.dataModel()
         tabLoader: tabLoader
 
         maxExpandableBubbles: SettingsModel.preloadCount
@@ -115,8 +105,8 @@ Item {
         }
 
         onCloseRequested: {
-            if(index >= 0) tabModel.remove(index)
-            else tabModel.clear()
+            if(index >= 0) TabModel.remove(index)
+            else TabModel.clear()
         }
     }
 
@@ -138,7 +128,16 @@ Item {
               </interface>'
 
         function openUrl(url){
-            root.push(url.toString())
+            var urlString = url.toString()
+            if(SettingsModel.doubleTapToOpenExternally) {
+                if(TabModel.enqueuedUrl === urlString)
+                {
+                    TabModel.enqueuedUrl = ''
+                    g_dropletHelper.openInExternal(urlString)
+                }
+                else TabModel.delayedPush(urlString)
+            }
+            else TabModel.push(urlString)
         }
 
         function openUrlExternally(url){
@@ -146,12 +145,12 @@ Item {
         }
 
         function quit(){
-            tabModel.clear()
+            TabModel.clear()
         }
 
         function dropletCount()
         {
-            return tabModel.count
+            return TabModel.count
         }
 
         function attachClient()
@@ -204,7 +203,7 @@ Item {
 
     Component.onCompleted: {
         SettingsModel.isDefaultBrowser = g_dropletHelper.isDefaultBrowser
-        g_dbusService.emitSignal("dropletCountChanged", tabModel.count)
+        g_dbusService.emitSignal("dropletCountChanged", TabModel.count)
 
         if(thisWindow.fallbackMode){
             fallbackModeNotification.publish()

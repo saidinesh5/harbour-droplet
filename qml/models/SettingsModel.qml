@@ -39,6 +39,7 @@ Item {
     //General Settings
     property alias isFirstRun: firstRunItem.value
     property alias isDefaultBrowser: defaultBrowserItem.value
+    property alias doubleTapToOpenExternally: doubleTapToOpenExternallyItem.value
     readonly property int overlayTimeout: 3000
 
     //Browser Settings
@@ -58,6 +59,12 @@ Item {
       id: defaultBrowserItem
       key: "/apps/garageresearch/droplet/is_default_browser"
       defaultValue: false
+    }
+
+    ConfigurationValue {
+      id: doubleTapToOpenExternallyItem
+      key: "/apps/garageresearch/droplet/doubletap_to_open_externally"
+      defaultValue: true
     }
 
     ConfigurationValue {

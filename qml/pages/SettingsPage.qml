@@ -53,9 +53,16 @@ Page {
             }
 
             TextSwitch {
-                text: qsTr("Open links in Droplet browser by default")
+                text: qsTr("Tap links to open them in Droplet browser by default")
                 checked: SettingsModel.isDefaultBrowser
                 onCheckedChanged: SettingsModel.isDefaultBrowser = checked
+            }
+
+            TextSwitch {
+                text: qsTr("Double tap links to open them in Sailfish browser")
+                checked: SettingsModel.doubleTapToOpenExternally
+                onCheckedChanged: if(checked !== SettingsModel.doubleTapToOpenExternally)
+                                      SettingsModel.doubleTapToOpenExternally = checked
             }
 
             TextSwitch {

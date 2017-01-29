@@ -167,8 +167,8 @@ Rectangle {
 
                 switch (data.type) {
                 case 'link':
-                    if(data.target === '_blank') root.push(data.href)
-                    else if(data.target && data.target !== '_parent') root.push(data.href)
+                    if(data.target === '_blank') TabModel.push(data.href)
+                    else if(data.target && data.target !== '_parent') TabModel.push(data.href)
                     break
                 }
             }
