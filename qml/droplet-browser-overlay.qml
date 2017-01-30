@@ -57,7 +57,10 @@ Item {
 
     BookmarksModel { id: g_bookmarksModel }
     HistoryModel { id: g_historyModel }
-    TabModel { id: g_tabModel }
+    TabModel {
+        id: g_tabModel
+        onCountChanged: g_dbusService.emitSignal("dropletCountChanged", g_tabModel.count)
+    }
 
     Item {
         id: tabContainer
