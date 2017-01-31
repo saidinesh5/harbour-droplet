@@ -27,7 +27,7 @@ Item {
 
     property int number
     property bool showNumber
-    property bool numberAlignmentToRight
+    property bool showNumberToRight
 
     property alias iconText: iconLabel.text
     property alias iconSource: icon.source
@@ -115,7 +115,7 @@ Item {
 
         Rectangle {
             id: bubbleCount
-            x: numberAlignmentToRight? bubbleContent.width - width : 0
+            x: showNumberToRight? bubbleContent.width - width : 0
             y: bubbleContent.height - height
             opacity: showNumber ? 1.0  : 0
             width: numberLabel.width + Theme.paddingMedium

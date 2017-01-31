@@ -104,7 +104,7 @@ Item {
             number: bubbleStack.expanded? count - maxExpandableBubbles : count
             showNumber: expanded? (index === bubbleStack.count - maxExpandableBubbles && bubbleStack.count - maxExpandableBubbles > 0 && !held):
                                   count > 1
-            numberAlignmentToRight: tab && bubbleStack && tab.x + tab.width/2 > bubbleStack.width/2
+            showNumberToRight: bubbleStack.snapX == 0
 
             visible: isTop || bubbleStack.expanded && isExpandable(index + 1)
             highlighted: isCurrent || held
