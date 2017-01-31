@@ -13,7 +13,7 @@ Name:       harbour-droplet
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    A lightweight web browser that loads the links in the background
-Version:    0.1
+Version:    0.2
 Release:    1
 Group:      Qt/Qt
 License:    LICENSE
@@ -21,6 +21,7 @@ URL:        http://example.org/
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-droplet.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
+Requires:   libsailfishapp-launcher
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)

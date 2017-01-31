@@ -25,7 +25,7 @@ SOURCES += src/harbour-droplet.cpp \
     src/droplethelper.cpp
 
 OTHER_FILES += \
-    rpm/harbour-droplet.changes.in \
+    rpm/harbour-droplet.changes \
     rpm/harbour-droplet.spec \
     rpm/harbour-droplet.yaml \
     translations/*.ts \

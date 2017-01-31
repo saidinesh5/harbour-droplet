@@ -1,3 +1,8 @@
+* Tue Jan 31 2017 Dinesh Manajipet <saidinesh5@gmail.com> 0.2-1
+- Fixed the broken Droplet count in the harbour-droplet app
+- Made the BubbleStack expand from the location where it was on (for easier one handed operation)
+- A more Sailfishified Icon, thanks to Ingvix
+
 * Mon Jan 30 2017 Dinesh Manajipet <saidinesh5@gmail.com> 0.1-1
 - Added a "Double tap a link to open bypass Droplet browser"
 - Added a fallback mode for applet view - to work on unpatched lipstick
