@@ -33,6 +33,7 @@ Droplet browser is a lightweight browser for Sailfish OS, that lets you multitas
 ## Thanks
 - folks @ #sailfishos on freenode
 - webcat and web pirate browsers
+- Ingvix for the Sailfishy icon
 
 Your donations are welcome at:
 <a href="https://www.paypal.me/saidinesh5" target="_blank"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" alt="Paypal me" title="Paypal me" border="0"></a>
