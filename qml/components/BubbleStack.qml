@@ -18,7 +18,6 @@
 */
 
 import QtQuick 2.0
-import QtQml.Models 2.1
 
 Item {
     id: bubbleStack
@@ -30,6 +29,7 @@ Item {
     property int snapX: width - bubbleWidth
     property int snapY: height/4
     property int maxExpandableBubbles: 5
+    property bool expandFromLeft: snapX === 0
 
     property Bubble interactionTarget
     property bool interactionActive: interactionTarget != null
@@ -150,8 +150,9 @@ Item {
                 property: 'x'
                 value: {
                     if(bubbleStack.expanded) {
-                        if(isExpandable(index)) bubbleWidth*(index - Math.max(bubbleStack.count - maxExpandableBubbles, 0))
-                        else 0
+                        //bubbleWidth*(index - Math.max(bubbleStack.count - maxExpandableBubbles, 0))
+                        if(bubbleStack.expandFromLeft) bubbleWidth*(Math.min(bubbleStack.count - index - 1, maxExpandableBubbles - 1))
+                        else bubbleStack.width - bubbleWidth*(Math.min(bubbleStack.count - index, maxExpandableBubbles))
                     }
                     else snapX
                 }
