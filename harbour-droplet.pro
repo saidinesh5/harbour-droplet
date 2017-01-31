@@ -32,8 +32,6 @@ OTHER_FILES += \
     harbour-droplet.desktop \
     open-url-droplet.desktop \
     net.garageresearch.droplet.service \
-    qml/js/devicePixelRatioHack.js \
-    qml/js/userscript.js
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 256x256
 
@@ -54,6 +52,8 @@ DISTFILES += \
     qml/pages/SettingsPage.qml \
     qml/pages/AboutPage.qml \
     qml/components/Bubble.qml \
+    qml/js/devicePixelRatioHack.js \
+    qml/js/userscript.js \
     qml/js/favicon.js \
     qml/images/Logo.svg \
     qml/components/TrashCan.qml \
