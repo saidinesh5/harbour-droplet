@@ -64,6 +64,11 @@ Page {
                 width: page.width/2
                 height: width
                 source: Qt.resolvedUrl("../images/harbour-droplet.svg")
+
+                MouseArea {
+                    anchors.fill: parent
+                    onPressAndHold: pageStack.push(Qt.resolvedUrl("FirstRunPage.qml"))
+                }
             }
 
             Label {
