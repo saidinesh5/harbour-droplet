@@ -36,6 +36,8 @@
 #include <QGuiApplication>
 #include <QScopedPointer>
 #include <QtQml>
+#include <QCommandLineParser>
+#include <QCommandLineOption>
 
 #include <sailfishapp.h>
 #include "appletview.h"
@@ -54,15 +56,32 @@ int main(int argc, char *argv[])
     setenv("USE_ASYNC", "1", 1);
 
     QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
+    QCommandLineParser parser;
+    parser.setApplicationDescription(QCoreApplication::translate("main", "A lightweight web browser for Sailfish OS"));
+    parser.addHelpOption();
+    parser.addPositionalArgument("url", QCoreApplication::translate("main", "Url to open"));
+    parser.process(*app.data());
 
-    //Code for command line arguments come here
+    const QStringList args = parser.positionalArguments();
 
-    qmlRegisterType<AppletView>("net.garageresearch.droplet", 0, 1, "AppletView");
-    qmlRegisterType<DropletHelper>("net.garageresearch.droplet", 0, 1, "DropletHelper");
+    if(args.length() > 0){
+        const QString url = args.at(0);
+        DropletHelper helper;
+        qDebug() << args;
+        helper.openInDroplet(url);
+        if(app->hasPendingEvents())
+            app->processEvents();
+        return 0;
+    }
+    else {
+        //Code for command line arguments come here
+        qmlRegisterType<AppletView>("net.garageresearch.droplet", 0, 1, "AppletView");
+        qmlRegisterType<DropletHelper>("net.garageresearch.droplet", 0, 1, "DropletHelper");
 
-    QScopedPointer<AppletView> view(new AppletView());
-    view->setSource(SailfishApp::pathTo("qml/droplet-browser-overlay.qml"));
-    view->showFullscreen();
+        QScopedPointer<AppletView> view(new AppletView());
+        view->setSource(SailfishApp::pathTo("qml/droplet-browser-overlay.qml"));
+        view->showFullscreen();
 
-    return app->exec();
+        return app->exec();
+    }
 }
