@@ -107,8 +107,14 @@ Item {
         maxExpandableBubbles: SettingsModel.preloadCount
         onExpandedChanged: {
             //thisWindow.activeAreaShape = (expanded)? AppletView.Rectangle : AppletView.Ellipse
-            if(expanded) thisWindow.raise()
-            else thisWindow.lower()
+            if(expanded) {
+                thisWindow.flags |= (Qt.WindowOverridesSystemGestures)
+                thisWindow.raise()
+            }
+            else {
+                thisWindow.flags &= ~(Qt.WindowOverridesSystemGestures)
+                thisWindow.lower()
+            }
         }
 
         onCloseRequested: {
