@@ -65,7 +65,7 @@ Item {
     Item {
         id: tabContainer
         width: root.width
-        height: root.height - tabStack.bubbleWidth
+        height: root.height - bubbleStack.bubbleWidth
 
         visible: true
 
@@ -79,30 +79,30 @@ Item {
                 clip: true
                 anchors.fill: parent
                 url: source
-                visible: tabStack.currentIndex === index && tabStack.expanded
-                active: tabStack.isExpandable(index)
+                visible: bubbleStack.currentIndex === index && bubbleStack.expanded
+                active: bubbleStack.isExpandable(index)
 
-                onCollapseRequested: tabStack.expanded = false
+                onCollapseRequested: bubbleStack.expanded = false
                 onCloseRequested: g_tabModel.remove(index)
                 onBookmarkedChanged: g_dbusService.emitSignal("bookmarksUpdated", [])
             }
         }
 
-        y: tabStack.expanded? tabStack.bubbleWidth : root.height
+        y: bubbleStack.expanded? bubbleStack.bubbleWidth : root.height
+
         Behavior on y { NumberAnimation { duration: 200 } }
     }
 
     BubbleStack {
-        id: tabStack
+        id: bubbleStack
 
         anchors.fill: parent
 
-        property rect contentArea: expanded || interactionActive? Qt.rect(0, 0, width, height):
-                                                                  Qt.rect(snapX,snapY, bubbleWidth, bubbleWidth)
+        property rect contentArea: expanded? Qt.rect(0, 0, width, height):
+                                             Qt.rect(snapX,snapY, bubbleWidth, bubbleWidth)
         onContentAreaChanged: thisWindow.activeArea = contentArea
 
         model: g_tabModel.dataModel()
-        tabLoader: tabLoader
 
         maxExpandableBubbles: SettingsModel.preloadCount
         onExpandedChanged: {
@@ -115,6 +115,25 @@ Item {
                 thisWindow.flags &= ~(Qt.WindowOverridesSystemGestures)
                 thisWindow.lower()
             }
+        }
+
+        delegate: Bubble {
+            property Tab tab: tabLoader.itemAt(index)
+            property bool isTop: index === bubbleStack.count - 1
+            property bool isCurrent: index === bubbleStack.currentIndex || (isTop && !bubbleStack.expanded)
+
+            iconSource: tab !== null ? tab.icon : ''
+            progress: tab !== null? tab.loadProgress : 0
+            showProgress: tab !== null && tab.loading
+
+            number: bubbleStack.expanded? bubbleStack.count - bubbleStack.maxExpandableBubbles : bubbleStack.count
+            showNumber: bubbleStack.expanded? (index === bubbleStack.count - bubbleStack.maxExpandableBubbles && bubbleStack.count - bubbleStack.maxExpandableBubbles > 0 && !pressed):
+                                  bubbleStack.count > 1
+            showNumberToRight: bubbleStack.snapX === 0
+            visible: isTop || bubbleStack.expanded && bubbleStack.isExpandable(index + 1)
+
+            highlighted: isCurrent || pressed
+            backgroundColor: pressed? Qt.rgba(0.7,0.7,0.7, 1) : Qt.rgba(1, 1, 1, 1)
         }
 
         onCloseRequested: {

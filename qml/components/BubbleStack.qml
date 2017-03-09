@@ -24,15 +24,16 @@ Item {
 
     clip: true
 
-    //TODO: refactor this component to be not dependent on Bubble
     //TODO: Save me and restore me on App exit
     property int snapX: width - bubbleWidth
     property int snapY: height/4
     property int maxExpandableBubbles: 5
     property bool expandFromLeft: snapX === 0
 
-    property Bubble interactionTarget
+    property Item interactionTarget
     property bool interactionActive: interactionTarget != null
+    property Item dragTarget
+    property bool dragActive: dragTarget != null
 
     property bool expanded
     property alias model: bubbles.model
@@ -40,18 +41,18 @@ Item {
     onCountChanged: bubbleStack.expanded = false
 
     property int currentIndex
-    property Bubble currentItem: currentIndex >= 0 && currentIndex < bubbles.count? bubbles.itemAt(currentIndex) : null
-    property int bubbleWidth: currentItem != null? currentItem.width : 1
-    property Item tabLoader
-
-    signal closeRequested(int index)
-
     Binding {
         when: !expanded
         target: bubbleStack
         property: 'currentIndex'
         value: bubbleStack.count - 1
     }
+    property Item currentItem: currentIndex >= 0 && currentIndex < count? bubbles.itemAt(currentIndex).item : null
+    property int bubbleWidth: currentItem != null? currentItem.width : 1
+
+    property Component delegate
+
+    signal closeRequested(int index)
 
     function isExpandable(index) {
         return bubbleStack.count - index - 1 < maxExpandableBubbles
@@ -61,70 +62,71 @@ Item {
         //Checks if the circle containing bubble1 overlaps with that of bubble2
         var center1 = Qt.vector2d(bubble1.x + bubble1.width/2, bubble1.y + bubble1.height/2)
         var center2 = Qt.vector2d(bubble2.x + bubble2.width/2, bubble2.y + bubble2.height/2)
+        var radius1 = bubble1.width/2
+        var radius2 = bubble2.width/2
         var distance = center1.minus(center2).length()
-        return distance < bubble1.radius + bubble2.radius
+        return distance < radius1 + radius2
     }
 
     TrashCan {
         id: trashCan
 
-        enabled: interactionActive
-        activated: interactionTarget != null && _overlaps(this, interactionTarget)
+        enabled: dragActive
+        activated: dragTarget != null && _overlaps(this, dragTarget)
 
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: height
+        y: enabled? parent.height - 2*height : parent.height
+
+        Behavior on y {
+            enabled: dragActive
+            NumberAnimation{ easing.period: 0.75; duration: 500; easing.type: Easing.OutElastic }
+        }
     }
 
     Repeater {
         id: bubbles
-        Bubble {
+
+        Item {
             id: bubble
 
-            property bool isTop: index === bubbleStack.count - 1
-            property bool isCurrent: index === bubbleStack.currentIndex || (isTop && !bubbleStack.expanded)
-            property Tab tab: tabLoader.itemAt(index)
             property int bubbleIndex: index
+            property alias item: delegateLoader.item
 
-            iconSource: tab !== null ? tab.icon : ''
-            progress: tab !== null? tab.loadProgress : 0
-            showProgress: tab !== null && tab.loading
+            width: item.width
+            height: item.height
 
-            Connections {
-                target: tabLoader
-                onItemAdded: if(index === bubbleIndex) tab = item
-                onItemRemoved: if(index === bubbleIndex) tab = null
+            Loader {
+                id: delegateLoader
+
+                property int index: bubble.bubbleIndex
+                property bool pressed: mouseArea.pressed
+
+                sourceComponent: bubbleStack.delegate
             }
 
-            minX: 0
-            minY: 0
-            maxX: bubbleStack.width
-            maxY: bubbleStack.height
+            MouseArea {
+                id: mouseArea
+                anchors.fill: parent
 
-            number: bubbleStack.expanded? count - maxExpandableBubbles : count
-            showNumber: expanded? (index === bubbleStack.count - maxExpandableBubbles && bubbleStack.count - maxExpandableBubbles > 0 && !held):
-                                  count > 1
-            showNumberToRight: bubbleStack.snapX == 0
+                property bool dragActive: drag.active
 
-            visible: isTop || bubbleStack.expanded && isExpandable(index + 1)
-            highlighted: isCurrent || held
+                drag.target: bubble
+                drag.minimumX: 0
+                drag.minimumY: 0
+                drag.maximumX: bubbleStack.width
+                drag.maximumY: bubbleStack.height
 
-            onClicked: {
-                if(bubbleStack.expanded){
-                    if(bubbleStack.currentIndex === index) bubbleStack.expanded = false
-                    else bubbleStack.currentIndex = index
+                onClicked: {
+                    if(bubbleStack.expanded){
+                        if(bubbleStack.currentIndex === index) bubbleStack.expanded = false
+                        else bubbleStack.currentIndex = index
+                    }
+                    else bubbleStack.expanded = true
                 }
-                else bubbleStack.expanded = true
-            }
-            onDoubleClicked: bubbleStack.expanded = !bubbleStack.expanded
-            onDragActiveChanged: {
-                if(dragActive)
-                {
-                    bubbleStack.interactionTarget = this
-                }
-                else
-                {
-                    //See if this bubble needs to be deleted
+
+                onDoubleClicked: bubbleStack.expanded = !bubbleStack.expanded
+                onPressed: bubbleStack.interactionTarget = item
+                onReleased: {
                     if(bubbleStack._overlaps(bubble, trashCan))
                     {
                         bubbleStack.interactionTarget = null
@@ -133,20 +135,27 @@ Item {
                         return
                     }
 
-                    //See if the user just wants to move the tabStack around
-                    if(!bubbleStack.expanded)
+                    bubbleStack.interactionTarget = null
+                }
+
+                onDragActiveChanged: {
+                    if(!dragActive)
                     {
-                        snapX = x + width/2 > bubbleStack.width/2? bubbleStack.width - width : 0
-                        snapY = y
+                        if(!bubbleStack.expanded)
+                        {
+                            snapX = bubble.x + bubble.width/2 > bubbleStack.width/2? bubbleStack.width - bubble.width : 0
+                            snapY = bubble.y
+                        }
                     }
 
-                    bubbleStack.interactionTarget = null
+                    bubbleStack.dragTarget = dragActive? bubble : null
                 }
             }
 
+
             Binding {
                 target: bubble
-                when: !bubbleStack.interactionActive
+                when: !bubbleStack.dragActive
                 property: 'x'
                 value: {
                     if(bubbleStack.expanded) {
@@ -160,13 +169,13 @@ Item {
 
             Binding {
                 target: bubble
-                when: !bubbleStack.interactionActive
+                when: !bubbleStack.dragActive
                 property: 'y'
                 value: bubbleStack.expanded ? 0 : snapY
             }
 
-            Behavior on x { enabled: !held; NumberAnimation { duration: 200; easing.type: Easing.InOutQuad } }
-            Behavior on y { enabled: !held; NumberAnimation { duration: 200; easing.type: Easing.InOutQuad } }
+            Behavior on x { enabled: !bubbleStack.interactionActive; NumberAnimation { easing.period: 0.75; duration: 500; easing.type: Easing.OutElastic } }
+            Behavior on y { enabled: !bubbleStack.interactionActive; NumberAnimation { easing.period: 0.75; duration: 500; easing.type: Easing.OutElastic } }
         }
     }
 }

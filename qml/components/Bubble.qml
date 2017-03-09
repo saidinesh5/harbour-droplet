@@ -37,103 +37,66 @@ Item {
 
     property bool highlighted
 
-    property int minX: 0
-    property int minY: 0
-    property int maxX: 0
-    property int maxY: 0
-
     property int diameter: Math.max(iconLabel.width, iconLabel.height)*3
-    property alias radius: bubbleContent.radius
-
-    property bool dragActive: mouseArea.drag.active
-    property alias held: mouseArea.pressed
+    property alias radius: bubbleBg.radius
+    property alias backgroundColor: bubbleBg.color
 
     width: diameter
     height: diameter
 
-    signal clicked()
-    signal doubleClicked()
-    signal pressed()
-    signal released()
-
-    MouseArea {
-        id: mouseArea
-
-        anchors.fill: parent
-
-        drag.target: bubble
-        drag.minimumX: minX
-        drag.minimumY: minY
-        drag.maximumX: maxX - bubble.width
-        drag.maximumY: maxY - bubble.height
-
-        onClicked: bubble.clicked()
-        onDoubleClicked: bubble.doubleClicked()
-        onPressed: bubble.pressed()
-        onReleased: bubble.released()
-    }
-
     Rectangle {
-        id: bubbleContent
+        id: bubbleBg
 
-        x: highlighted? 0 : 0.1*diameter
-        y: highlighted? 0 : 0.1*diameter
+        anchors.centerIn: parent
         width: highlighted? diameter : diameter*0.8
         height: width
         radius: width*0.5
         border.color: 'darkgrey'
-        color: held? Qt.rgba(0.7,0.7,0.7, 1) : Qt.rgba(1, 1, 1, 1)
 
         Behavior on width { NumberAnimation{ duration: 200 } }
-        Behavior on x { NumberAnimation{ duration: 200 } }
-        Behavior on y { NumberAnimation{ duration: 200 } }
+    }
 
-        //TODO: Use a loader to save some resources when items are not shown?
+    Label {
+        id: iconLabel
+        anchors.centerIn: parent
+        font.family: FontAwesome.fontName
+        text: FontAwesome.icon.globe
+        visible: icon.source == ''
+        color: 'black'
+    }
+
+    Image {
+        id: icon
+        width: parent.width/3
+        height: width
+        anchors.centerIn: parent
+    }
+
+    ProgressCircle {
+        id: progressCircle
+        width: highlighted? diameter : diameter*0.8
+        height: width
+        progressValue: 0.55
+        visible: progressValue !== -1 && progressValue !== 1.0
+    }
+
+    Rectangle {
+        id: bubbleCount
+        x: showNumberToRight? bubbleBg.width - width : 0
+        y: bubbleBg.height - height
+        visible: showNumber
+        width: numberLabel.width + Theme.paddingMedium
+        height: numberLabel.height*1.1
+        radius: width/4
+        color: 'lightblue'
+
         Label {
-            id: iconLabel
+            id: numberLabel
             anchors.centerIn: parent
-            font.family: FontAwesome.fontName
-            font.pointSize: 24
-            text: FontAwesome.icon.globe
-            visible: icon.source == ''
-            color: 'black'
+            fontSizeMode: Text.Fit
+            font.bold: true
+            text: number
+            color: 'white'
         }
-
-        Image {
-            id: icon
-            width: parent.width/3
-            height: width
-            anchors.centerIn: parent
-        }
-
-        ProgressCircle {
-            id: progressCircle
-            anchors.fill: parent
-            progressValue: 0.55
-            visible: progressValue !== -1 && progressValue !== 1.0
-        }
-
-        Rectangle {
-            id: bubbleCount
-            x: showNumberToRight? bubbleContent.width - width : 0
-            y: bubbleContent.height - height
-            opacity: showNumber ? 1.0  : 0
-            width: numberLabel.width + Theme.paddingMedium
-            height: numberLabel.height*1.1
-            radius: width/4
-            color: 'lightblue'
-
-            Label {
-                id: numberLabel
-                anchors.centerIn: parent
-                fontSizeMode: Text.Fit
-                font.bold: true
-                text: number
-                color: 'white'
-            }
-
-            Behavior on opacity { NumberAnimation { duration: 200 } }
-        }
-
     }
 }
