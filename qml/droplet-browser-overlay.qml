@@ -67,8 +67,6 @@ Item {
         width: root.width
         height: root.height - bubbleStack.bubbleWidth
 
-        visible: true
-
         Repeater {
             id: tabLoader
             width: tabContainer.width
@@ -91,6 +89,17 @@ Item {
         y: bubbleStack.expanded? bubbleStack.bubbleWidth : root.height
 
         Behavior on y { NumberAnimation { duration: 200 } }
+
+        property bool peekMode
+        opacity: peekMode? 0.1 : 1
+        Behavior on opacity{ NumberAnimation { duration: 200 } }
+
+        //To wait till the user actually "Long presses" to peek
+        Timer {
+            id: peekTimer
+            interval: 200
+            onTriggered: tabContainer.peekMode = true
+        }
     }
 
     BubbleStack {
@@ -139,6 +148,14 @@ Item {
         onCloseRequested: {
             if(index >= 0) g_tabModel.remove(index)
             else g_tabModel.clear()
+        }
+
+        onInteractionActiveChanged: {
+            if(interactionActive) peekTimer.restart()
+            else {
+                peekTimer.stop()
+                tabContainer.peekMode = false
+            }
         }
     }
 

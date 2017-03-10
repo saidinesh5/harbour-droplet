@@ -31,11 +31,11 @@ Rectangle {
 
     color: activated? 'white' : Qt.rgba(0,0,0,0.8)
     border.color: activated? 'black' : 'white'
+    opacity: enabled? 1.0 : 0.0
 
     width: diameter
     height: diameter
     radius: diameter/2
-
 
     Label {
         id: icon
@@ -46,7 +46,6 @@ Rectangle {
         text: activated? FontAwesome.icon.trash_o : FontAwesome.icon.trash
     }
 
-    opacity: enabled? 1.0 : 0.0
-    Behavior on opacity { NumberAnimation { duration: 200 } }
     Behavior on color { ColorAnimation { duration: 200 } }
+    Behavior on opacity { NumberAnimation { duration: 200 } }
 }

@@ -75,12 +75,10 @@ Item {
         activated: dragTarget != null && _overlaps(this, dragTarget)
 
         anchors.horizontalCenter: parent.horizontalCenter
-        y: enabled? parent.height - 2*height : parent.height
 
-        Behavior on y {
-            enabled: dragActive
-            NumberAnimation{ easing.period: 0.75; duration: 500; easing.type: Easing.OutElastic }
-        }
+        y: enabled? parent.height - 2*height : parent.height
+        Behavior on y { NumberAnimation{ easing.period: 0.75; duration: 500; easing.type: Easing.OutElastic } }
+
     }
 
     Repeater {
@@ -109,6 +107,7 @@ Item {
                 anchors.fill: parent
 
                 property bool dragActive: drag.active
+                property bool isLongPress
 
                 drag.target: bubble
                 drag.minimumX: 0
@@ -121,9 +120,10 @@ Item {
                         if(bubbleStack.currentIndex === index) bubbleStack.expanded = false
                         else bubbleStack.currentIndex = index
                     }
-                    else bubbleStack.expanded = true
+                    else bubbleStack.expanded = !isLongPress
                 }
 
+                onPressAndHold: isLongPress = true
                 onDoubleClicked: bubbleStack.expanded = !bubbleStack.expanded
                 onPressed: bubbleStack.interactionTarget = item
                 onReleased: {
@@ -136,6 +136,7 @@ Item {
                     }
 
                     bubbleStack.interactionTarget = null
+                    isLongPress = false
                 }
 
                 onDragActiveChanged: {

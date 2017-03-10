@@ -62,43 +62,43 @@ Rectangle {
     signal collapseRequested()
 
     onLoadingChanged: if(!loading) g_historyModel.add(url, title)
+/*
+    Component {
+        id: contentComponent
+        Rectangle {
+            //id: dummycontent
+            property url url: tab.url
+            property url icon
+            property string title: 'Demo Demo Demo Demo Demo Demo Demo'
+            property bool loading: loadProgress <= 1
+            property real loadProgress: Math.random()
+            property bool canGoBack: true
+            property bool canGoForward: false
 
-//    Component {
-//        id: contentComponent
-//        Rectangle {
-//            //id: dummycontent
-//            property url url: tab.url
-//            property url icon
-//            property string title: 'Demo Demo Demo Demo Demo Demo Demo'
-//            property bool loading: loadProgress <= 1
-//            property real loadProgress: Math.random()
-//            property bool canGoBack: true
-//            property bool canGoForward: false
+            color: Qt.rgba(Math.random(), Math.random(), Math.random(), 1)
 
-//            color: Qt.rgba(Math.random(), Math.random(), Math.random(), 1)
+            function goBack(){ console.log("Going back") }
+            function goForward(){ console.log("Going forward") }
+            function stop(){ loadProgress = 1 }
+            function reload(){ loadProgress = 0 }
 
-//            function goBack(){ console.log("Going back") }
-//            function goForward(){ console.log("Going forward") }
-//            function stop(){ loadProgress = 1 }
-//            function reload(){ loadProgress = 0 }
+            TextEdit {
+                anchors.centerIn: parent
+                text:  mobileMode? 'mobile :'+  url  : 'desktop :' + url
+                focus: tab.visible
+            }
 
-//            TextEdit {
-//                anchors.centerIn: parent
-//                text:  mobileMode? 'mobile :'+  url  : 'desktop :' + url
-//                focus: tab.visible
-//            }
+            Timer {
+                running: loading
+                repeat: true
+                interval: 100
+                onTriggered: loadProgress += 0.01*Math.random()
+            }
 
-//            Timer {
-//                running: loading
-//                repeat: true
-//                interval: 100
-//                onTriggered: loadProgress += 0.01*Math.random()
-//            }
-
-//            Component.onCompleted: console.log("Loaded: ", url)
-//        }
-//    }
-
+            Component.onCompleted: console.log("Loaded: ", url)
+        }
+    }
+*/
     Component {
         id: contentComponent
         WebView {
@@ -206,6 +206,7 @@ Rectangle {
         width: header.width
         height: header.height
         enabled: false
+        visible: enabled
         y: enabled? header.height : 0
 
         Row {
