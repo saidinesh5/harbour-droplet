@@ -41,7 +41,6 @@ Rectangle {
         id: icon
         anchors.centerIn: parent
         font.family: FontAwesome.fontName
-        font.pointSize: 24
         color: activated? 'black' : 'white'
         text: activated? FontAwesome.icon.trash_o : FontAwesome.icon.trash
     }

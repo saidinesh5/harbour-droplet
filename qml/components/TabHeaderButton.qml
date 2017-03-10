@@ -38,7 +38,6 @@ MouseArea {
             id: icon
             color: button.enabled? 'black' : 'grey'
             anchors.centerIn: parent
-            font.pointSize: 18
             font.family: FontAwesome.fontName
         }
     }
