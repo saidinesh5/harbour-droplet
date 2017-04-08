@@ -54,6 +54,13 @@ Item {
         border.color: 'darkgrey'
 
         Behavior on width { NumberAnimation{ duration: 200 } }
+
+        ProgressCircle {
+            id: progressCircle
+            anchors.fill: parent
+            progressValue: 0.55
+            visible: progressValue !== -1 && progressValue !== 1.0
+        }
     }
 
     Label {
@@ -70,14 +77,6 @@ Item {
         width: parent.width/3
         height: width
         anchors.centerIn: parent
-    }
-
-    ProgressCircle {
-        id: progressCircle
-        width: highlighted? diameter : diameter*0.8
-        height: width
-        progressValue: 0.55
-        visible: progressValue !== -1 && progressValue !== 1.0
     }
 
     Rectangle {
