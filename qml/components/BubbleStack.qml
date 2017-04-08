@@ -127,15 +127,15 @@ Item {
                 onDoubleClicked: bubbleStack.expanded = !bubbleStack.expanded
                 onPressed: bubbleStack.interactionTarget = item
                 onReleased: {
+                    bubbleStack.interactionTarget = null
+
                     if(bubbleStack._overlaps(bubble, trashCan))
                     {
-                        bubbleStack.interactionTarget = null
                         if(bubbleStack.expanded) bubbleStack.closeRequested(index)
                         else bubbleStack.closeRequested(-1)
                         return
                     }
 
-                    bubbleStack.interactionTarget = null
                     isLongPress = false
                 }
 

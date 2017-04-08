@@ -111,7 +111,7 @@ Item {
                                              Qt.rect(snapX,snapY, bubbleWidth, bubbleWidth)
         onContentAreaChanged: thisWindow.activeArea = contentArea
 
-        model: tabLoader.count
+        model: g_tabModel.dataModel()
 
         maxExpandableBubbles: SettingsModel.preloadCount
         onExpandedChanged: {
