@@ -74,6 +74,7 @@ Item {
             model: g_tabModel.dataModel()
 
             delegate: Tab {
+                id: tab
                 clip: true
                 anchors.fill: parent
                 url: source
@@ -83,6 +84,8 @@ Item {
                 onCollapseRequested: bubbleStack.expanded = false
                 onCloseRequested: g_tabModel.remove(index)
                 onBookmarkedChanged: g_dbusService.emitSignal("bookmarksUpdated", [])
+
+                Component.onCompleted: bubbleStack.itemAt(index).tab = tab
             }
         }
 

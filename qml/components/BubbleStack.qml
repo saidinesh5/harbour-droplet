@@ -58,6 +58,10 @@ Item {
         return bubbleStack.count - index - 1 < maxExpandableBubbles
     }
 
+    function itemAt(index) {
+        return bubbles.itemAt(index) !== null? bubbles.itemAt(index).item : null
+    }
+
     function _overlaps(bubble1, bubble2) {
         //Checks if the circle containing bubble1 overlaps with that of bubble2
         var center1 = Qt.vector2d(bubble1.x + bubble1.width/2, bubble1.y + bubble1.height/2)
