@@ -1,3 +1,9 @@
+* Wed Feb 01 2017 Dinesh Manajipet <saidinesh5@gmail.com> 0.3-1
+- Added support for command line activation
+- Disabled System Gestures when Applets are raised
+- Added support for longPress to peek
+- Made the animations feel smoother
+
 * Tue Jan 31 2017 Dinesh Manajipet <saidinesh5@gmail.com> 0.2-1
 - Fixed the broken Droplet count in the harbour-droplet app
 - Made the BubbleStack expand from the location where it was on (for easier one handed operation)

@@ -29,7 +29,7 @@ Item {
         return LS.LocalStorage.openDatabaseSync("dropletbrowser", "0.1", "StorageDatabase", 100000);
     }
 
-    readonly property string applicationVersion: "0.2"
+    readonly property string applicationVersion: "0.3"
 
     readonly property string dbusServiceName: "net.garageresearch.droplet"
     readonly property string dbusPathName: "/browser"

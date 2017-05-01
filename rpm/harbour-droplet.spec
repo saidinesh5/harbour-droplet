@@ -13,7 +13,7 @@ Name:       harbour-droplet
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    A lightweight web browser that loads the links in the background
-Version:    0.2
+Version:    0.3
 Release:    1
 Group:      Qt/Qt
 License:    LICENSE
